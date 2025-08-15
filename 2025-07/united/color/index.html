@@ -1,0 +1,412 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"> 
+    <title>Mosaic created by AndreaMosaic</title>
+    <link rel="stylesheet" href="app/leaflet.css" />
+    <link rel="stylesheet" href="app/Control.FullScreen.css" />
+    <link rel="stylesheet" href="app/easy-button.css" />
+    <link rel="stylesheet" href="app/help-table.css" />
+    <link rel="stylesheet" href="app/leaflet-search.css" />
+    <style type="text/css">
+        html, body, #AndreaMosaic {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background: black;
+        }
+    </style>
+</head>
+<body>
+    <div id="AndreaMosaic"></div>
+    <script src="app/leaflet.js"></script>
+    <script src="app/leafletzoom.js"></script>  
+    <script src="app/Control.FullScreen.js"></script>  
+    <script src="app/easy-button.js"></script>  
+    <script src="app/leaflet-search.js"></script>
+    <script type="application/javascript">
+        // TileArrays is an array of the tiles. It is needed for getPopUpText, getHelpText, getSearchText. Can be null.
+        // Each tileArray item has mandatory the first 4 elements defined as x,y,width,height in pixels of the tile position.
+        // Other elements in the array are optional and custom defined. See getTileObject.
+        // For mosaics with many tiles this array should have as few elements as possible or even not defined at all.
+        // With a very large amount of tiles it is suggested to store this list on the server and retrieve the tile 
+        // on demand in getTileObject.
+        var tileArrays = [
+			// tileX, tileY, tileWidth, tileHeight, tileNr, imageNr, imageUsageCount, imageUrl, imageName, imageExtension
+			[0,0,248,259,28,28,1,"tiles/guido-coppa-IPhIW5W1GwI-unsplash-28.jpg","guido-coppa-IPhIW5W1GwI-unsplash-28","jpg"],
+			[0,1036,248,259,166,166,1,"tiles/jesus-boscan-uk078sotWrc-unsplash-166.jpg","jesus-boscan-uk078sotWrc-unsplash-166","jpg"],
+			[0,1295,248,259,26,26,1,"tiles/gayatri-malhotra-GQ3ORLOD8OY-unsplash-26.jpg","gayatri-malhotra-GQ3ORLOD8OY-unsplash-26","jpg"],
+			[0,1554,248,259,217,217,1,"tiles/john-cardamone-daRGSCIzF78-unsplash-217.jpg","john-cardamone-daRGSCIzF78-unsplash-217","jpg"],
+			[0,1813,248,259,180,180,1,"tiles/bernie-almanzar-GSrYT193lJk-unsplash-180.jpg","bernie-almanzar-GSrYT193lJk-unsplash-180","jpg"],
+			[0,2072,248,259,97,97,1,"tiles/barbara-zandoval-PkewFTaSRnk-unsplash-97.jpg","barbara-zandoval-PkewFTaSRnk-unsplash-97","jpg"],
+			[0,2331,248,259,16,16,1,"tiles/patrick-perkins-dtBwi16wgOs-unsplash-16.jpg","patrick-perkins-dtBwi16wgOs-unsplash-16","jpg"],
+			[0,259,248,259,88,88,1,"tiles/kevin-turcios-jzp9_Y9_O1I-unsplash-88.jpg","kevin-turcios-jzp9_Y9_O1I-unsplash-88","jpg"],
+			[0,2590,248,259,124,124,1,"tiles/faiza-haji-MP1cRB6CXEc-unsplash-124.jpg","faiza-haji-MP1cRB6CXEc-unsplash-124","jpg"],
+			[0,2849,248,251,92,92,1,"tiles/not-us-ortopediatri-cocuk-ortopedi-akademisi-FauvKjQSybk-unsplash-92.jpg","not-us-ortopediatri-cocuk-ortopedi-akademisi-FauvKjQSybk-unsplash-92","jpg"],
+			[0,518,248,259,23,23,1,"tiles/patrick-perkins-dz5q1Ao9ZJU-unsplash-23.jpg","patrick-perkins-dz5q1Ao9ZJU-unsplash-23","jpg"],
+			[0,777,248,259,162,162,1,"tiles/jessica-podraza-ZvNaAGYVlEc-unsplash-162.jpg","jessica-podraza-ZvNaAGYVlEc-unsplash-162","jpg"],
+			[1240,0,248,259,225,225,1,"tiles/karollyne-videira-hubert-Kp0Ub2ad2Dk-unsplash-225.jpg","karollyne-videira-hubert-Kp0Ub2ad2Dk-unsplash-225","jpg"],
+			[1240,1036,248,259,109,109,1,"tiles/alyssa-baches-b_r08ERLzwg-unsplash-109.jpg","alyssa-baches-b_r08ERLzwg-unsplash-109","jpg"],
+			[1240,1295,248,259,191,191,1,"tiles/ehimetalor-akhere-unuabona--o0fuIW1WrA-unsplash-191.jpg","ehimetalor-akhere-unuabona--o0fuIW1WrA-unsplash-191","jpg"],
+			[1240,1554,248,259,50,50,1,"tiles/heather-mount-N5cdEEhv8xs-unsplash-50.jpg","heather-mount-N5cdEEhv8xs-unsplash-50","jpg"],
+			[1240,1813,248,259,83,83,1,"tiles/meg-5aDwQh-JfZo-unsplash-83.jpg","meg-5aDwQh-JfZo-unsplash-83","jpg"],
+			[1240,2072,248,259,30,30,1,"tiles/frankie-cordoba-E3zubhnUvnA-unsplash-30.jpg","frankie-cordoba-E3zubhnUvnA-unsplash-30","jpg"],
+			[1240,2331,248,259,226,226,1,"tiles/karollyne-videira-hubert-oF0T1_Vfvbw-unsplash-226.jpg","karollyne-videira-hubert-oF0T1_Vfvbw-unsplash-226","jpg"],
+			[1240,259,248,259,179,179,1,"tiles/bertrand-colombo-8Eifk_1N5Wk-unsplash-179.jpg","bertrand-colombo-8Eifk_1N5Wk-unsplash-179","jpg"],
+			[1240,2590,248,259,65,65,1,"tiles/ilia-bronskiy-lFPcEaueZUg-unsplash-65.jpg","ilia-bronskiy-lFPcEaueZUg-unsplash-65","jpg"],
+			[1240,2849,248,251,69,69,1,"tiles/mana5280-XblMxB8A6vk-unsplash-69.jpg","mana5280-XblMxB8A6vk-unsplash-69","jpg"],
+			[1240,518,248,259,146,146,1,"tiles/aiden-craver-zpw1s5spZOY-unsplash-146.jpg","aiden-craver-zpw1s5spZOY-unsplash-146","jpg"],
+			[1240,777,248,259,189,189,1,"tiles/ehimetalor-akhere-unuabona-hvby1QMmlyw-unsplash-189.jpg","ehimetalor-akhere-unuabona-hvby1QMmlyw-unsplash-189","jpg"],
+			[1488,0,248,259,211,211,1,"tiles/jose-garcia-JUqh1FyBbv4-unsplash-211.jpg","jose-garcia-JUqh1FyBbv4-unsplash-211","jpg"],
+			[1488,1036,248,259,133,133,1,"tiles/2019-brian-kyed-P7EFJs577Xg-unsplash-133.jpg","2019-brian-kyed-P7EFJs577Xg-unsplash-133","jpg"],
+			[1488,1295,248,259,164,164,1,"tiles/jeff-ackley-6oHKXPdPY0o-unsplash-164.jpg","jeff-ackley-6oHKXPdPY0o-unsplash-164","jpg"],
+			[1488,1554,248,259,61,61,1,"tiles/heather-mount-RoEp74AUzoI-unsplash-61.jpg","heather-mount-RoEp74AUzoI-unsplash-61","jpg"],
+			[1488,1813,248,259,198,198,1,"tiles/claudio-schwarz-NKyIkM83i9Q-unsplash-198.jpg","claudio-schwarz-NKyIkM83i9Q-unsplash-198","jpg"],
+			[1488,2072,248,259,167,167,1,"tiles/jan-budomo-QLIyTJvP00M-unsplash-167.jpg","jan-budomo-QLIyTJvP00M-unsplash-167","jpg"],
+			[1488,2331,248,259,121,121,1,"tiles/tide_trasher_x-_ux1Vlivdac-unsplash-121.jpg","tide_trasher_x-_ux1Vlivdac-unsplash-121","jpg"],
+			[1488,259,248,259,129,129,1,"tiles/fab-zamp-unZLUnFs8BQ-unsplash-129.jpg","fab-zamp-unZLUnFs8BQ-unsplash-129","jpg"],
+			[1488,2590,248,259,161,161,1,"tiles/isaac-n-PyaEhfnWv_0-unsplash-161.jpg","isaac-n-PyaEhfnWv_0-unsplash-161","jpg"],
+			[1488,2849,248,251,70,70,1,"tiles/manny-becerra-m5Wxm98QMm0-unsplash-70.jpg","manny-becerra-m5Wxm98QMm0-unsplash-70","jpg"],
+			[1488,518,248,259,13,13,1,"tiles/rangi-siebert-0lbNd1xPA_U-unsplash-13.jpg","rangi-siebert-0lbNd1xPA_U-unsplash-13","jpg"],
+			[1488,777,248,259,130,130,1,"tiles/ehimetalor-akhere-unuabona-OwMta0L8jpk-unsplash-130.jpg","ehimetalor-akhere-unuabona-OwMta0L8jpk-unsplash-130","jpg"],
+			[1736,0,248,259,18,18,1,"tiles/patrick-perkins-j-CD-cg3qEc-unsplash-18.jpg","patrick-perkins-j-CD-cg3qEc-unsplash-18","jpg"],
+			[1736,1036,248,259,94,94,1,"tiles/nice-m-nshuti-u1c0Q-hhEhc-unsplash-94.jpg","nice-m-nshuti-u1c0Q-hhEhc-unsplash-94","jpg"],
+			[1736,1295,248,259,184,184,1,"tiles/documerica-5z8fGuV36UY-unsplash-184.jpg","documerica-5z8fGuV36UY-unsplash-184","jpg"],
+			[1736,1554,248,259,51,51,1,"tiles/heather-mount-vgxp8M18U50-unsplash-51.jpg","heather-mount-vgxp8M18U50-unsplash-51","jpg"],
+			[1736,1813,248,259,232,232,1,"tiles/clay-banks-Tt0kNJtnFNE-unsplash-232.jpg","clay-banks-Tt0kNJtnFNE-unsplash-232","jpg"],
+			[1736,2072,248,259,159,159,1,"tiles/jens-riesenberg-A-DLC-MC_4I-unsplash-159.jpg","jens-riesenberg-A-DLC-MC_4I-unsplash-159","jpg"],
+			[1736,2331,248,259,100,100,1,"tiles/barbara-provenzano-azH9d_hjZGw-unsplash-100.jpg","barbara-provenzano-azH9d_hjZGw-unsplash-100","jpg"],
+			[1736,259,248,259,41,41,1,"tiles/frankie-cordoba-pr-5h43VF6w-unsplash-41.jpg","frankie-cordoba-pr-5h43VF6w-unsplash-41","jpg"],
+			[1736,2590,248,259,147,147,1,"tiles/alex-hlaing-YxYdxQjR9r4-unsplash-147.jpg","alex-hlaing-YxYdxQjR9r4-unsplash-147","jpg"],
+			[1736,2849,248,251,81,81,1,"tiles/mario-verduzco-TNO_BnhDmvo-unsplash-81.jpg","mario-verduzco-TNO_BnhDmvo-unsplash-81","jpg"],
+			[1736,518,248,259,142,142,1,"tiles/aiden-craver-MzytRs4j5n4-unsplash-142.jpg","aiden-craver-MzytRs4j5n4-unsplash-142","jpg"],
+			[1736,777,248,259,78,78,1,"tiles/leonardo-basso-U5TJhvjZMZk-unsplash-78.jpg","leonardo-basso-U5TJhvjZMZk-unsplash-78","jpg"],
+			[1984,0,248,259,216,216,1,"tiles/julia-mouketo-779dtuKJpK8-unsplash-216.jpg","julia-mouketo-779dtuKJpK8-unsplash-216","jpg"],
+			[1984,1036,248,259,112,112,1,"tiles/alexander-grey-wYUOwC8JsDQ-unsplash-112.jpg","alexander-grey-wYUOwC8JsDQ-unsplash-112","jpg"],
+			[1984,1295,248,259,14,14,1,"tiles/pexels-polina-tankilevitch-8609269-14.jpg","pexels-polina-tankilevitch-8609269-14","jpg"],
+			[1984,1554,248,259,47,47,1,"tiles/in-lieu-in-view-photography-MUCQZE74NME-unsplash-47.jpg","in-lieu-in-view-photography-MUCQZE74NME-unsplash-47","jpg"],
+			[1984,1813,248,259,71,71,1,"tiles/mario-verduzco-j0AugU_ypPc-unsplash-71.jpg","mario-verduzco-j0AugU_ypPc-unsplash-71","jpg"],
+			[1984,2072,248,259,105,105,1,"tiles/baliente-agency-XQRbhV23Jfc-unsplash-105.jpg","baliente-agency-XQRbhV23Jfc-unsplash-105","jpg"],
+			[1984,2331,248,259,239,239,1,"tiles/delia-giandeini-LsWy6oBKimY-unsplash-239.jpg","delia-giandeini-LsWy6oBKimY-unsplash-239","jpg"],
+			[1984,259,248,259,17,17,1,"tiles/patrick-perkins-eNJ_N-uiyPw-unsplash-17.jpg","patrick-perkins-eNJ_N-uiyPw-unsplash-17","jpg"],
+			[1984,2590,248,259,213,213,1,"tiles/kadir-celep-6_Z4DvRP3ps-unsplash-213.jpg","kadir-celep-6_Z4DvRP3ps-unsplash-213","jpg"],
+			[1984,2849,248,251,76,76,1,"tiles/markus-spiske-TB5YAMVX9j4-unsplash-76.jpg","markus-spiske-TB5YAMVX9j4-unsplash-76","jpg"],
+			[1984,518,248,259,140,140,1,"tiles/aiden-craver-jQJiN9ukkuE-unsplash-140.jpg","aiden-craver-jQJiN9ukkuE-unsplash-140","jpg"],
+			[1984,777,248,259,35,35,1,"tiles/frankie-cordoba-AzeMTUCQ2hA-unsplash-35.jpg","frankie-cordoba-AzeMTUCQ2hA-unsplash-35","jpg"],
+			[2232,0,248,259,99,99,1,"tiles/belinda-fewings-0rF0aJB1jkA-unsplash-99.jpg","belinda-fewings-0rF0aJB1jkA-unsplash-99","jpg"],
+			[2232,1036,248,259,115,115,1,"tiles/alyssa-baches-FJgC5ho-B9Q-unsplash-115.jpg","alyssa-baches-FJgC5ho-B9Q-unsplash-115","jpg"],
+			[2232,1295,248,259,64,64,1,"tiles/ilia-bronskiy-zis_n-rJvwQ-unsplash-64.jpg","ilia-bronskiy-zis_n-rJvwQ-unsplash-64","jpg"],
+			[2232,1554,248,259,9,9,1,"tiles/philip-myrtorp-PrvrZNHKBwM-unsplash-9.jpg","philip-myrtorp-PrvrZNHKBwM-unsplash-9","jpg"],
+			[2232,1813,248,259,155,155,1,"tiles/jan-budomo-Duym8cAa9WU-unsplash-155.jpg","jan-budomo-Duym8cAa9WU-unsplash-155","jpg"],
+			[2232,2072,248,259,110,110,1,"tiles/baliente-agency-0ZGdbEextqA-unsplash-110.jpg","baliente-agency-0ZGdbEextqA-unsplash-110","jpg"],
+			[2232,2331,248,259,111,111,1,"tiles/alexander-grey-JngP0kqu6JQ-unsplash-111.jpg","alexander-grey-JngP0kqu6JQ-unsplash-111","jpg"],
+			[2232,259,248,259,10,10,1,"tiles/reagan-nicole-oaVi2UN75aI-unsplash-10.jpg","reagan-nicole-oaVi2UN75aI-unsplash-10","jpg"],
+			[2232,2590,248,259,141,141,1,"tiles/alexander-grey-9J1NuJ7Dgz4-unsplash-141.jpg","alexander-grey-9J1NuJ7Dgz4-unsplash-141","jpg"],
+			[2232,2849,248,251,118,118,1,"tiles/tide_trasher_x-qMi4L1sCcM8-unsplash-118.jpg","tide_trasher_x-qMi4L1sCcM8-unsplash-118","jpg"],
+			[2232,518,248,259,95,95,1,"tiles/mon-sag-KVuF-SCgaGM-unsplash-95.jpg","mon-sag-KVuF-SCgaGM-unsplash-95","jpg"],
+			[2232,777,248,259,240,240,1,"tiles/denin-lawley-ThXxRNDdSt4-unsplash-240.jpg","denin-lawley-ThXxRNDdSt4-unsplash-240","jpg"],
+			[248,0,248,259,227,227,1,"tiles/karollyne-videira-hubert-vfrGtBfD5vQ-unsplash-227.jpg","karollyne-videira-hubert-vfrGtBfD5vQ-unsplash-227","jpg"],
+			[248,1036,248,259,38,38,1,"tiles/gage-walker-NMksMDahhg4-unsplash-38.jpg","gage-walker-NMksMDahhg4-unsplash-38","jpg"],
+			[248,1295,248,259,178,178,1,"tiles/berenice-melis-cNKnDxNZ35I-unsplash-178.jpg","berenice-melis-cNKnDxNZ35I-unsplash-178","jpg"],
+			[248,1554,248,259,173,173,1,"tiles/brian-wangenheim-FZe47Ks3z2E-unsplash-173.jpg","brian-wangenheim-FZe47Ks3z2E-unsplash-173","jpg"],
+			[248,1813,248,259,205,205,1,"tiles/christian-lue-LPwLkzl1nd8-unsplash-205.jpg","christian-lue-LPwLkzl1nd8-unsplash-205","jpg"],
+			[248,2072,248,259,75,75,1,"tiles/mercedes-mehling-AqmIcSrg63I-unsplash-75.jpg","mercedes-mehling-AqmIcSrg63I-unsplash-75","jpg"],
+			[248,2331,248,259,154,154,1,"tiles/jan-budomo-_5GA5UtHjGQ-unsplash-154.jpg","jan-budomo-_5GA5UtHjGQ-unsplash-154","jpg"],
+			[248,259,248,259,52,52,1,"tiles/huma-h-yardim-ZQxQFwvsODY-unsplash-52.jpg","huma-h-yardim-ZQxQFwvsODY-unsplash-52","jpg"],
+			[248,2590,248,259,150,150,1,"tiles/jan-budomo-H_efbdKwvrY-unsplash-150.jpg","jan-budomo-H_efbdKwvrY-unsplash-150","jpg"],
+			[248,2849,248,251,145,145,1,"tiles/aiden-craver-rd2xWsvbyV8-unsplash-145.jpg","aiden-craver-rd2xWsvbyV8-unsplash-145","jpg"],
+			[248,518,248,259,108,108,1,"tiles/alexander-grey-VpnCgrlHU7A-unsplash-108.jpg","alexander-grey-VpnCgrlHU7A-unsplash-108","jpg"],
+			[248,777,248,259,235,235,1,"tiles/denin-lawley-ZZrNc-sP32Y-unsplash-235.jpg","denin-lawley-ZZrNc-sP32Y-unsplash-235","jpg"],
+			[2480,0,248,259,223,223,1,"tiles/karollyne-videira-hubert-mnfiZnh9Its-unsplash-223.jpg","karollyne-videira-hubert-mnfiZnh9Its-unsplash-223","jpg"],
+			[2480,1036,248,259,43,43,1,"tiles/frankie-cordoba-y2gwxf4JU5g-unsplash-43.jpg","frankie-cordoba-y2gwxf4JU5g-unsplash-43","jpg"],
+			[2480,1295,248,259,73,73,1,"tiles/leemar-gaskin-ZZ6TvYO1WME-unsplash-73.jpg","leemar-gaskin-ZZ6TvYO1WME-unsplash-73","jpg"],
+			[2480,1554,248,259,122,122,1,"tiles/erik-torres-6dwKR8bFj60-unsplash-122.jpg","erik-torres-6dwKR8bFj60-unsplash-122","jpg"],
+			[2480,1813,248,259,1,1,1,"tiles/raj-tuladhar-w9mWDIHOESE-unsplash-1.jpg","raj-tuladhar-w9mWDIHOESE-unsplash-1","jpg"],
+			[2480,2072,248,259,174,174,1,"tiles/brittani-burns-98uYQ-KupiE-unsplash-174.jpg","brittani-burns-98uYQ-KupiE-unsplash-174","jpg"],
+			[2480,2331,248,259,137,137,1,"tiles/aiden-craver-joz_6QRCxds-unsplash-137.jpg","aiden-craver-joz_6QRCxds-unsplash-137","jpg"],
+			[2480,259,248,259,21,21,1,"tiles/patrick-perkins-5qtFzszcIcI-unsplash-21.jpg","patrick-perkins-5qtFzszcIcI-unsplash-21","jpg"],
+			[2480,2590,248,259,119,119,1,"tiles/tide_trasher_x-Cge7LCL0hVc-unsplash-119.jpg","tide_trasher_x-Cge7LCL0hVc-unsplash-119","jpg"],
+			[2480,2849,248,251,72,72,1,"tiles/mana5280-XpzVdUN7kR4-unsplash-72.jpg","mana5280-XpzVdUN7kR4-unsplash-72","jpg"],
+			[2480,518,248,259,89,89,1,"tiles/lewis-guapo-I6PqLR587v8-unsplash-89.jpg","lewis-guapo-I6PqLR587v8-unsplash-89","jpg"],
+			[2480,777,248,259,181,181,1,"tiles/ehimetalor-akhere-unuabona-e3pLtn35PxQ-unsplash-181.jpg","ehimetalor-akhere-unuabona-e3pLtn35PxQ-unsplash-181","jpg"],
+			[2728,0,248,259,228,228,1,"tiles/jon-tyson-ba5vMkxLzFU-unsplash-228.jpg","jon-tyson-ba5vMkxLzFU-unsplash-228","jpg"],
+			[2728,1036,248,259,12,12,1,"tiles/pexels-charly-louise-531358788-19503767-12.jpg","pexels-charly-louise-531358788-19503767-12","jpg"],
+			[2728,1295,248,259,156,156,1,"tiles/jan-budomo-f4wPAh-sdTo-unsplash-156.jpg","jan-budomo-f4wPAh-sdTo-unsplash-156","jpg"],
+			[2728,1554,248,259,53,53,1,"tiles/in-lieu-in-view-photography-y6_ngywxH28-unsplash-53.jpg","in-lieu-in-view-photography-y6_ngywxH28-unsplash-53","jpg"],
+			[2728,1813,248,259,237,237,1,"tiles/cody-pulliam-GGKVGSkKIzM-unsplash-237.jpg","cody-pulliam-GGKVGSkKIzM-unsplash-237","jpg"],
+			[2728,2072,248,259,220,220,1,"tiles/jon-tyson-_9sq1rxSTvw-unsplash-220.jpg","jon-tyson-_9sq1rxSTvw-unsplash-220","jpg"],
+			[2728,2331,248,259,116,116,1,"tiles/baliente-agency-Lgwj4pglfhE-unsplash-116.jpg","baliente-agency-Lgwj4pglfhE-unsplash-116","jpg"],
+			[2728,259,248,259,136,136,1,"tiles/aiden-craver-734d77muxdU-unsplash-136.jpg","aiden-craver-734d77muxdU-unsplash-136","jpg"],
+			[2728,2590,248,259,40,40,1,"tiles/gayatri-malhotra-c1s02_3mO-o-unsplash-40.jpg","gayatri-malhotra-c1s02_3mO-o-unsplash-40","jpg"],
+			[2728,2849,248,251,82,82,1,"tiles/mari-vlassi-zDkkLr4h3Sc-unsplash-82.jpg","mari-vlassi-zDkkLr4h3Sc-unsplash-82","jpg"],
+			[2728,518,248,259,143,143,1,"tiles/aiden-craver-UmguNPBaEJs-unsplash-143.jpg","aiden-craver-UmguNPBaEJs-unsplash-143","jpg"],
+			[2728,777,248,259,128,128,1,"tiles/frankie-cordoba-09iM5vFo9BE-unsplash-128.jpg","frankie-cordoba-09iM5vFo9BE-unsplash-128","jpg"],
+			[2976,0,248,259,212,212,1,"tiles/julian-schneiderath-G_BaxV660Sk-unsplash-212.jpg","julian-schneiderath-G_BaxV660Sk-unsplash-212","jpg"],
+			[2976,1036,248,259,39,39,1,"tiles/heather-mount-JHYwVm7-2_8-unsplash-39.jpg","heather-mount-JHYwVm7-2_8-unsplash-39","jpg"],
+			[2976,1295,248,259,182,182,1,"tiles/ehimetalor-akhere-unuabona-LxRucJOwqRI-unsplash-182.jpg","ehimetalor-akhere-unuabona-LxRucJOwqRI-unsplash-182","jpg"],
+			[2976,1554,248,259,49,49,1,"tiles/heather-mount-mXi3H_GB6IU-unsplash-49.jpg","heather-mount-mXi3H_GB6IU-unsplash-49","jpg"],
+			[2976,1813,248,259,66,66,1,"tiles/ilia-bronskiy-zmLoX9MB9D0-unsplash-66.jpg","ilia-bronskiy-zmLoX9MB9D0-unsplash-66","jpg"],
+			[2976,2072,248,259,29,29,1,"tiles/gayatri-malhotra-oZN9qWnayhs-unsplash-29.jpg","gayatri-malhotra-oZN9qWnayhs-unsplash-29","jpg"],
+			[2976,2331,248,259,203,203,1,"tiles/charliewarl-SAXnHxu8PS8-unsplash-203.jpg","charliewarl-SAXnHxu8PS8-unsplash-203","jpg"],
+			[2976,259,248,259,236,236,1,"tiles/claudio-schwarz-QKvyxICpfH0-unsplash-236.jpg","claudio-schwarz-QKvyxICpfH0-unsplash-236","jpg"],
+			[2976,2590,248,259,32,32,1,"tiles/heather-mount-6RzCutNSMK4-unsplash-32.jpg","heather-mount-6RzCutNSMK4-unsplash-32","jpg"],
+			[2976,2849,248,251,90,90,1,"tiles/logan-weaver-lgnwvr-8L1APbMbviY-unsplash-90.jpg","logan-weaver-lgnwvr-8L1APbMbviY-unsplash-90","jpg"],
+			[2976,518,248,259,210,210,1,"tiles/julia-mouketo-79TknMXA-M0-unsplash-210.jpg","julia-mouketo-79TknMXA-M0-unsplash-210","jpg"],
+			[2976,777,248,259,103,103,1,"tiles/barbara-burgess-l_o32zYzwkk-unsplash-103.jpg","barbara-burgess-l_o32zYzwkk-unsplash-103","jpg"],
+			[3224,0,248,259,221,221,1,"tiles/kalea-morgan--R3pWoWJmTY-unsplash-221.jpg","kalea-morgan--R3pWoWJmTY-unsplash-221","jpg"],
+			[3224,1036,248,259,190,190,1,"tiles/ehimetalor-akhere-unuabona-I5LIUM9O6i8-unsplash-190.jpg","ehimetalor-akhere-unuabona-I5LIUM9O6i8-unsplash-190","jpg"],
+			[3224,1295,248,259,187,187,1,"tiles/ehimetalor-akhere-unuabona-CH79GileMc0-unsplash-187.jpg","ehimetalor-akhere-unuabona-CH79GileMc0-unsplash-187","jpg"],
+			[3224,1554,248,259,188,188,1,"tiles/diego-sanchez-PLf4CctiBSw-unsplash-188.jpg","diego-sanchez-PLf4CctiBSw-unsplash-188","jpg"],
+			[3224,1813,248,259,207,207,1,"tiles/charliewarl-7duMar1Yo5s-unsplash-207.jpg","charliewarl-7duMar1Yo5s-unsplash-207","jpg"],
+			[3224,2072,248,259,107,107,1,"tiles/alexander-grey-VMZQHJg2aW8-unsplash-107.jpg","alexander-grey-VMZQHJg2aW8-unsplash-107","jpg"],
+			[3224,2331,248,259,84,84,1,"tiles/mana5280-EAHh8HeNRsI-unsplash-84.jpg","mana5280-EAHh8HeNRsI-unsplash-84","jpg"],
+			[3224,259,248,259,45,45,1,"tiles/gayatri-malhotra-aAs9hiVVxLw-unsplash-45.jpg","gayatri-malhotra-aAs9hiVVxLw-unsplash-45","jpg"],
+			[3224,2590,248,259,58,58,1,"tiles/heather-mount-VcDVPB-fkOI-unsplash-58.jpg","heather-mount-VcDVPB-fkOI-unsplash-58","jpg"],
+			[3224,2849,248,251,19,19,1,"tiles/patrick-perkins-MQjvbu6qLHU-unsplash-19.jpg","patrick-perkins-MQjvbu6qLHU-unsplash-19","jpg"],
+			[3224,518,248,259,194,194,1,"tiles/barbara-burgess-TlnWON8mdac-unsplash-194.jpg","barbara-burgess-TlnWON8mdac-unsplash-194","jpg"],
+			[3224,777,248,259,200,200,1,"tiles/christine-von-raesfeld-EoZXzh82wiI-unsplash-200.jpg","christine-von-raesfeld-EoZXzh82wiI-unsplash-200","jpg"],
+			[3472,0,248,259,22,22,1,"tiles/patrick-perkins-Ankb7ZGb1Gc-unsplash-22.jpg","patrick-perkins-Ankb7ZGb1Gc-unsplash-22","jpg"],
+			[3472,1036,248,259,185,185,1,"tiles/ehimetalor-akhere-unuabona-N5_-9nNTWtM-unsplash-185.jpg","ehimetalor-akhere-unuabona-N5_-9nNTWtM-unsplash-185","jpg"],
+			[3472,1295,248,259,186,186,1,"tiles/ehimetalor-akhere-unuabona-0y6qND61z-w-unsplash-186.jpg","ehimetalor-akhere-unuabona-0y6qND61z-w-unsplash-186","jpg"],
+			[3472,1554,248,259,34,34,1,"tiles/heather-mount-DncHjuAkyWY-unsplash-34.jpg","heather-mount-DncHjuAkyWY-unsplash-34","jpg"],
+			[3472,1813,248,259,158,158,1,"tiles/jan-budomo-ObP2-rbk1BQ-unsplash-158.jpg","jan-budomo-ObP2-rbk1BQ-unsplash-158","jpg"],
+			[3472,2072,248,259,153,153,1,"tiles/jake-schumacher-Hu9AKW10Ez0-unsplash-153.jpg","jake-schumacher-Hu9AKW10Ez0-unsplash-153","jpg"],
+			[3472,2331,248,259,231,231,1,"tiles/delia-giandeini-Q8urQ8ow7CU-unsplash-231.jpg","delia-giandeini-Q8urQ8ow7CU-unsplash-231","jpg"],
+			[3472,259,248,259,68,68,1,"tiles/markus-winkler-JODMH5e9rds-unsplash-68.jpg","markus-winkler-JODMH5e9rds-unsplash-68","jpg"],
+			[3472,2590,248,259,149,149,1,"tiles/jan-budomo-HSQi8fkHk80-unsplash-149.jpg","jan-budomo-HSQi8fkHk80-unsplash-149","jpg"],
+			[3472,2849,248,251,5,5,1,"tiles/ryunosuke-kikuno-XjgZMgxaztY-unsplash-5.jpg","ryunosuke-kikuno-XjgZMgxaztY-unsplash-5","jpg"],
+			[3472,518,248,259,102,102,1,"tiles/barbara-burgess-Gptwo30wMuc-unsplash-102.jpg","barbara-burgess-Gptwo30wMuc-unsplash-102","jpg"],
+			[3472,777,248,259,48,48,1,"tiles/heather-mount-u8JduLTWE4g-unsplash-48.jpg","heather-mount-u8JduLTWE4g-unsplash-48","jpg"],
+			[3720,0,248,259,11,11,1,"tiles/patrick-perkins-zsjGkx9Fqlk-unsplash-11.jpg","patrick-perkins-zsjGkx9Fqlk-unsplash-11","jpg"],
+			[3720,1036,248,259,123,123,1,"tiles/ethan-hasenfratz-OPeD0Kb6y_c-unsplash-123.jpg","ethan-hasenfratz-OPeD0Kb6y_c-unsplash-123","jpg"],
+			[3720,1295,248,259,206,206,1,"tiles/christian-lue-pSgO9pMVVUI-unsplash-206.jpg","christian-lue-pSgO9pMVVUI-unsplash-206","jpg"],
+			[3720,1554,248,259,157,157,1,"tiles/james-lee-wtKKPgkbenQ-unsplash-157.jpg","james-lee-wtKKPgkbenQ-unsplash-157","jpg"],
+			[3720,1813,248,259,202,202,1,"tiles/chris-j-davis-HkdO5viINbY-unsplash-202.jpg","chris-j-davis-HkdO5viINbY-unsplash-202","jpg"],
+			[3720,2072,248,259,106,106,1,"tiles/alexander-grey-jU40gA2UDmA-unsplash-106.jpg","alexander-grey-jU40gA2UDmA-unsplash-106","jpg"],
+			[3720,2331,248,259,233,233,1,"tiles/danielle-claude-belanger-J2tMrVcx0WY-unsplash-233.jpg","danielle-claude-belanger-J2tMrVcx0WY-unsplash-233","jpg"],
+			[3720,259,248,259,96,96,1,"tiles/barbara-zandoval-jYoxbGPCVFo-unsplash-96.jpg","barbara-zandoval-jYoxbGPCVFo-unsplash-96","jpg"],
+			[3720,2590,248,259,151,151,1,"tiles/iris-oblee-6rEU9L8UgJo-unsplash-151.jpg","iris-oblee-6rEU9L8UgJo-unsplash-151","jpg"],
+			[3720,2849,248,251,209,209,1,"tiles/joshua-hoehne-Axfa9PkrRPQ-unsplash-209.jpg","joshua-hoehne-Axfa9PkrRPQ-unsplash-209","jpg"],
+			[3720,518,248,259,56,56,1,"tiles/heather-mount-uISF00TRVbU-unsplash-56.jpg","heather-mount-uISF00TRVbU-unsplash-56","jpg"],
+			[3720,777,248,259,192,192,1,"tiles/barbara-burgess-_gf7LV6NVIo-unsplash-192.jpg","barbara-burgess-_gf7LV6NVIo-unsplash-192","jpg"],
+			[3968,0,248,259,79,79,1,"tiles/kevin-james-shay-Yk0fNrySs8Y-unsplash-79.jpg","kevin-james-shay-Yk0fNrySs8Y-unsplash-79","jpg"],
+			[3968,1036,248,259,214,214,1,"tiles/karollyne-videira-hubert-7SlJWQgS36s-unsplash-214.jpg","karollyne-videira-hubert-7SlJWQgS36s-unsplash-214","jpg"],
+			[3968,1295,248,259,238,238,1,"tiles/claudio-schwarz-TbrhGmfGYgk-unsplash-238.jpg","claudio-schwarz-TbrhGmfGYgk-unsplash-238","jpg"],
+			[3968,1554,248,259,127,127,1,"tiles/ernest-malimon-i9v2fSV8t6c-unsplash-127.jpg","ernest-malimon-i9v2fSV8t6c-unsplash-127","jpg"],
+			[3968,1813,248,259,170,170,1,"tiles/brian-kyed-7tFNWH-r0Fo-unsplash-170.jpg","brian-kyed-7tFNWH-r0Fo-unsplash-170","jpg"],
+			[3968,2072,248,259,197,197,1,"tiles/charliewarl-w4EY2LtKElc-unsplash-197.jpg","charliewarl-w4EY2LtKElc-unsplash-197","jpg"],
+			[3968,2331,248,259,177,177,1,"tiles/brian-kyed-f3avUuzMi2U-unsplash-177.jpg","brian-kyed-f3avUuzMi2U-unsplash-177","jpg"],
+			[3968,259,248,259,144,144,1,"tiles/aiden-frazier-QlSMmPql72A-unsplash-144.jpg","aiden-frazier-QlSMmPql72A-unsplash-144","jpg"],
+			[3968,2590,248,259,176,176,1,"tiles/bertrand-colombo-hm58A-ztiIQ-unsplash-176.jpg","bertrand-colombo-hm58A-ztiIQ-unsplash-176","jpg"],
+			[3968,2849,248,251,42,42,1,"tiles/frankie-cordoba-VVi4o1Twh8E-unsplash-42.jpg","frankie-cordoba-VVi4o1Twh8E-unsplash-42","jpg"],
+			[3968,518,248,259,195,195,1,"tiles/barbara-burgess-OzW66xAniTE-unsplash-195.jpg","barbara-burgess-OzW66xAniTE-unsplash-195","jpg"],
+			[3968,777,248,259,196,196,1,"tiles/barbara-burgess-wl8z01xnAHo-unsplash-196.jpg","barbara-burgess-wl8z01xnAHo-unsplash-196","jpg"],
+			[4216,0,248,259,7,7,1,"tiles/simon-daoudi-n3mgvMn-M2I-unsplash-7.jpg","simon-daoudi-n3mgvMn-M2I-unsplash-7","jpg"],
+			[4216,1036,248,259,3,3,1,"tiles/pexels-ivan-samkov-6437346-3.jpg","pexels-ivan-samkov-6437346-3","jpg"],
+			[4216,1295,248,259,114,114,1,"tiles/alexander-grey-u3pRViUI2oU-unsplash-114.jpg","alexander-grey-u3pRViUI2oU-unsplash-114","jpg"],
+			[4216,1554,248,259,204,204,1,"tiles/christian-lue-848Bkii7b6w-unsplash-204.jpg","christian-lue-848Bkii7b6w-unsplash-204","jpg"],
+			[4216,1813,248,259,24,24,1,"tiles/gayatri-malhotra-b-Nve_xRGpw-unsplash-24.jpg","gayatri-malhotra-b-Nve_xRGpw-unsplash-24","jpg"],
+			[4216,2072,248,259,15,15,1,"tiles/patrick-perkins-fLOe7jT9fXs-unsplash-15.jpg","patrick-perkins-fLOe7jT9fXs-unsplash-15","jpg"],
+			[4216,2331,248,259,132,132,1,"tiles/ehimetalor-akhere-unuabona-tQ5BNXR1YqI-unsplash-132.jpg","ehimetalor-akhere-unuabona-tQ5BNXR1YqI-unsplash-132","jpg"],
+			[4216,259,248,259,104,104,1,"tiles/barbara-burgess-N7CFNJo-QH8-unsplash-104.jpg","barbara-burgess-N7CFNJo-QH8-unsplash-104","jpg"],
+			[4216,2590,248,259,8,8,1,"tiles/pexels-mccutcheon-2433140-8.jpg","pexels-mccutcheon-2433140-8","jpg"],
+			[4216,2849,248,251,74,74,1,"tiles/kristel-hayes-FUc_wacdLOk-unsplash-74.jpg","kristel-hayes-FUc_wacdLOk-unsplash-74","jpg"],
+			[4216,518,248,259,6,6,1,"tiles/saimy-patel-uQQongzkncc-unsplash-6.jpg","saimy-patel-uQQongzkncc-unsplash-6","jpg"],
+			[4216,777,248,259,171,171,1,"tiles/brandy-wine-fdCRCVegq3w-unsplash-171.jpg","brandy-wine-fdCRCVegq3w-unsplash-171","jpg"],
+			[4464,0,248,259,224,224,1,"tiles/julia-mouketo-1tNv8l6AvJk-unsplash-224.jpg","julia-mouketo-1tNv8l6AvJk-unsplash-224","jpg"],
+			[4464,1036,248,259,44,44,1,"tiles/gayatri-malhotra-1XAwulZa8kU-unsplash-44.jpg","gayatri-malhotra-1XAwulZa8kU-unsplash-44","jpg"],
+			[4464,1295,248,259,67,67,1,"tiles/heather-mount-ryLFw0Sp_RA-unsplash-67.jpg","heather-mount-ryLFw0Sp_RA-unsplash-67","jpg"],
+			[4464,1554,248,259,57,57,1,"tiles/heather-mount-T8X_rtomfJc-unsplash-57.jpg","heather-mount-T8X_rtomfJc-unsplash-57","jpg"],
+			[4464,1813,248,259,168,168,1,"tiles/jan-budomo-wsDj2EWU2ug-unsplash-168.jpg","jan-budomo-wsDj2EWU2ug-unsplash-168","jpg"],
+			[4464,2072,248,259,113,113,1,"tiles/alexander-grey-H5mmL4aLW0E-unsplash-113.jpg","alexander-grey-H5mmL4aLW0E-unsplash-113","jpg"],
+			[4464,2331,248,259,169,169,1,"tiles/isaac-n-TMto26h89i0-unsplash-169.jpg","isaac-n-TMto26h89i0-unsplash-169","jpg"],
+			[4464,259,248,259,183,183,1,"tiles/ehimetalor-akhere-unuabona-M6Bpwmk7YTg-unsplash-183.jpg","ehimetalor-akhere-unuabona-M6Bpwmk7YTg-unsplash-183","jpg"],
+			[4464,2590,248,259,86,86,1,"tiles/lena-langmeyer-J_PRi8uO0Ck-unsplash-86.jpg","lena-langmeyer-J_PRi8uO0Ck-unsplash-86","jpg"],
+			[4464,2849,248,251,80,80,1,"tiles/marek-studzinski-2smsQsfre3A-unsplash-80.jpg","marek-studzinski-2smsQsfre3A-unsplash-80","jpg"],
+			[4464,518,248,259,193,193,1,"tiles/barbara-burgess-qVkhr_EGjGo-unsplash-193.jpg","barbara-burgess-qVkhr_EGjGo-unsplash-193","jpg"],
+			[4464,777,248,259,201,201,1,"tiles/chris-j-davis-C8qBA8z74eI-unsplash-201.jpg","chris-j-davis-C8qBA8z74eI-unsplash-201","jpg"],
+			[4712,0,248,259,219,219,1,"tiles/karollyne-videira-hubert-C6PF1ciLsgg-unsplash-219.jpg","karollyne-videira-hubert-C6PF1ciLsgg-unsplash-219","jpg"],
+			[4712,1036,248,259,59,59,1,"tiles/heather-mount-xSOLAXxS88g-unsplash-59.jpg","heather-mount-xSOLAXxS88g-unsplash-59","jpg"],
+			[4712,1295,248,259,98,98,1,"tiles/barbara-zandoval-PH2h-Mzkh4Q-unsplash-98.jpg","barbara-zandoval-PH2h-Mzkh4Q-unsplash-98","jpg"],
+			[4712,1554,248,259,54,54,1,"tiles/ilia-bronskiy-rTXxVtMn8PA-unsplash-54.jpg","ilia-bronskiy-rTXxVtMn8PA-unsplash-54","jpg"],
+			[4712,1813,248,259,222,222,1,"tiles/karollyne-videira-hubert-5eNzHnLck74-unsplash-222.jpg","karollyne-videira-hubert-5eNzHnLck74-unsplash-222","jpg"],
+			[4712,2072,248,259,55,55,1,"tiles/ipse-dixit-2aW8OPwyrL0-unsplash-55.jpg","ipse-dixit-2aW8OPwyrL0-unsplash-55","jpg"],
+			[4712,2331,248,259,46,46,1,"tiles/heather-mount-Os0KVjYD8fc-unsplash-46.jpg","heather-mount-Os0KVjYD8fc-unsplash-46","jpg"],
+			[4712,259,248,259,230,230,1,"tiles/danny-burke-H7WB3hXDyNo-unsplash-230.jpg","danny-burke-H7WB3hXDyNo-unsplash-230","jpg"],
+			[4712,2590,248,259,63,63,1,"tiles/honbike-s0EilGkPZc4-unsplash-63.jpg","honbike-s0EilGkPZc4-unsplash-63","jpg"],
+			[4712,2849,248,251,215,215,1,"tiles/ken-whytock-NVI6gFrpG4Q-unsplash-215.jpg","ken-whytock-NVI6gFrpG4Q-unsplash-215","jpg"],
+			[4712,518,248,259,62,62,1,"tiles/heather-mount-tBU1oeYuE78-unsplash-62.jpg","heather-mount-tBU1oeYuE78-unsplash-62","jpg"],
+			[4712,777,248,259,229,229,1,"tiles/karollyne-videira-hubert-wKHV6kNig0k-unsplash (1)-229.jpg","karollyne-videira-hubert-wKHV6kNig0k-unsplash (1)-229","jpg"],
+			[496,0,248,259,163,163,1,"tiles/jasmine-Whd3G13HjJY-unsplash-163.jpg","jasmine-Whd3G13HjJY-unsplash-163","jpg"],
+			[496,1036,248,259,27,27,1,"tiles/graham-klingler-cBHf-ZODYho-unsplash-27.jpg","graham-klingler-cBHf-ZODYho-unsplash-27","jpg"],
+			[496,1295,248,259,126,126,1,"tiles/faiza-haji-S--qVgb6e7Y-unsplash-126.jpg","faiza-haji-S--qVgb6e7Y-unsplash-126","jpg"],
+			[496,1554,248,259,31,31,1,"tiles/hanyang-zhang-_YTCejYsXt8-unsplash-31.jpg","hanyang-zhang-_YTCejYsXt8-unsplash-31","jpg"],
+			[496,1813,248,259,234,234,1,"tiles/denin-lawley-v1bpNoWk4WY-unsplash-234.jpg","denin-lawley-v1bpNoWk4WY-unsplash-234","jpg"],
+			[496,2072,248,259,33,33,1,"tiles/heather-mount-2zoEgVUqmS0-unsplash-33.jpg","heather-mount-2zoEgVUqmS0-unsplash-33","jpg"],
+			[496,2331,248,259,60,60,1,"tiles/heather-mount-ooCsfLmCeeE-unsplash-60.jpg","heather-mount-ooCsfLmCeeE-unsplash-60","jpg"],
+			[496,259,248,259,87,87,1,"tiles/mikhail-seleznev-xiRxIblAh9Q-unsplash-87.jpg","mikhail-seleznev-xiRxIblAh9Q-unsplash-87","jpg"],
+			[496,2590,248,259,160,160,1,"tiles/jan-budomo-OVfwNqvdhhE-unsplash-160.jpg","jan-budomo-OVfwNqvdhhE-unsplash-160","jpg"],
+			[496,2849,248,251,91,91,1,"tiles/mike-von-_DS5mXLZxWE-unsplash-91.jpg","mike-von-_DS5mXLZxWE-unsplash-91","jpg"],
+			[496,518,248,259,117,117,1,"tiles/thiago-rocha-w7vf6ApGQLw-unsplash-117.jpg","thiago-rocha-w7vf6ApGQLw-unsplash-117","jpg"],
+			[496,777,248,259,36,36,1,"tiles/heather-mount-GmG-_QQrjHA-unsplash-36.jpg","heather-mount-GmG-_QQrjHA-unsplash-36","jpg"],
+			[744,0,248,259,165,165,1,"tiles/jes-harrison-73Ax7e3CqAU-unsplash-165.jpg","jes-harrison-73Ax7e3CqAU-unsplash-165","jpg"],
+			[744,1036,248,259,77,77,1,"tiles/mana5280-gl_ZGbUgG7M-unsplash-77.jpg","mana5280-gl_ZGbUgG7M-unsplash-77","jpg"],
+			[744,1295,248,259,2,2,1,"tiles/redens-desrosiers-RnstlFUS4Rc-unsplash-2.jpg","redens-desrosiers-RnstlFUS4Rc-unsplash-2","jpg"],
+			[744,1554,248,259,37,37,1,"tiles/heather-mount-M4-xNOGC2YE-unsplash-37.jpg","heather-mount-M4-xNOGC2YE-unsplash-37","jpg"],
+			[744,1813,248,259,139,139,1,"tiles/aiden-craver-nmfncXar5r4-unsplash-139.jpg","aiden-craver-nmfncXar5r4-unsplash-139","jpg"],
+			[744,2072,248,259,218,218,1,"tiles/kaitlan-balsam-ycCm6MGLY-8-unsplash-218.jpg","kaitlan-balsam-ycCm6MGLY-8-unsplash-218","jpg"],
+			[744,2331,248,259,148,148,1,"tiles/jan-budomo-2H-834K8NHw-unsplash-148.jpg","jan-budomo-2H-834K8NHw-unsplash-148","jpg"],
+			[744,259,248,259,138,138,1,"tiles/alexander-grey-8-9EC69SiEY-unsplash-138.jpg","alexander-grey-8-9EC69SiEY-unsplash-138","jpg"],
+			[744,2590,248,259,172,172,1,"tiles/brian-kyed-kZfyTiP5Ap0-unsplash-172.jpg","brian-kyed-kZfyTiP5Ap0-unsplash-172","jpg"],
+			[744,2849,248,251,25,25,1,"tiles/gayatri-malhotra-C0hr6kIR_kE-unsplash-25.jpg","gayatri-malhotra-C0hr6kIR_kE-unsplash-25","jpg"],
+			[744,518,248,259,135,135,1,"tiles/abi-allen-q7X2fN14OUk-unsplash-135.jpg","abi-allen-q7X2fN14OUk-unsplash-135","jpg"],
+			[744,777,248,259,101,101,1,"tiles/barbara-burgess-FJ4AN2J1MVg-unsplash-101.jpg","barbara-burgess-FJ4AN2J1MVg-unsplash-101","jpg"],
+			[992,0,248,259,85,85,1,"tiles/maurice-williams-tPX992SVljo-unsplash-85.jpg","maurice-williams-tPX992SVljo-unsplash-85","jpg"],
+			[992,1036,248,259,93,93,1,"tiles/nathan-ives-cmMdxXC5uSs-unsplash-93.jpg","nathan-ives-cmMdxXC5uSs-unsplash-93","jpg"],
+			[992,1295,248,259,20,20,1,"tiles/patrick-perkins-oLzPii3A_PE-unsplash-20.jpg","patrick-perkins-oLzPii3A_PE-unsplash-20","jpg"],
+			[992,1554,248,259,208,208,1,"tiles/joshua-hoehne---YAKzZcrjw-unsplash-208.jpg","joshua-hoehne---YAKzZcrjw-unsplash-208","jpg"],
+			[992,1813,248,259,199,199,1,"tiles/cdc-FSRxDhA5x5s-unsplash-199.jpg","cdc-FSRxDhA5x5s-unsplash-199","jpg"],
+			[992,2072,248,259,175,175,1,"tiles/bertrand-colombo-kdjTbALnSm0-unsplash-175.jpg","bertrand-colombo-kdjTbALnSm0-unsplash-175","jpg"],
+			[992,2331,248,259,120,120,1,"tiles/zhen-yao-SoTyCEADTgE-unsplash-120.jpg","zhen-yao-SoTyCEADTgE-unsplash-120","jpg"],
+			[992,259,248,259,152,152,1,"tiles/jan-budomo-n9iJZFjN_94-unsplash-152.jpg","jan-budomo-n9iJZFjN_94-unsplash-152","jpg"],
+			[992,2590,248,259,131,131,1,"tiles/ehimetalor-akhere-unuabona-PIxYsSw9Rb4-unsplash-131.jpg","ehimetalor-akhere-unuabona-PIxYsSw9Rb4-unsplash-131","jpg"],
+			[992,2849,248,251,4,4,1,"tiles/refhad--WhnzDGvQJw-unsplash-4.jpg","refhad--WhnzDGvQJw-unsplash-4","jpg"],
+			[992,518,248,259,134,134,1,"tiles/aiden-craver-1nlSQnb6nVc-unsplash-134.jpg","aiden-craver-1nlSQnb6nVc-unsplash-134","jpg"],
+			[992,777,248,259,125,125,1,"tiles/ehimetalor-akhere-unuabona-NVvWE-k_5JQ-unsplash-125.jpg","ehimetalor-akhere-unuabona-NVvWE-k_5JQ-unsplash-125","jpg"],
+		];
+
+        // Get the tile at the specified position x,y in pixels
+        var getTileObject = function (x,y) {
+            var l = tileArrays.length;
+            for (n=0; n<l; ++n) {
+                tileInfo = tileArrays[n];
+                if (tileInfo[0] <= x && tileInfo[0]+tileInfo[2] >= x && tileInfo[1] <= y && tileInfo[1]+tileInfo[3] >= y) {
+                    return { 
+                        tileLeft:tileInfo[0],
+                        tileTop:tileInfo[1],
+                        tileWidth:tileInfo[2],
+                        tileHeight:tileInfo[3],
+                        tileRight:tileInfo[0]+tileInfo[1],
+                        tileBottom:tileInfo[2]+tileInfo[3],
+                        tileNr:tileInfo[4],
+                        imageNr:tileInfo[5],
+                        imageUsageCount:tileInfo[6],
+                        imageUrl:tileInfo[7],
+                        imageName:tileInfo[8],
+                        imageExtension:tileInfo[9],
+                    };
+                }
+            }
+            return null; // not found
+        }
+
+        var showPopUpWindow = function(popUpText, callback) {
+            callback.showPopUp({maxWidth:300, popUpText:popUpText}, callback.args);
+        }
+
+        // This function builds the PopUp window information for the specified Tile. 
+        // Returns an object with following members:
+        //  maxWidth: maximum width of the popup window.
+        //  popUpText: HTML text to show in the popup window.
+        var getPopUpFullText = function (x,y,callback) {
+            var tile = getTileObject(x,y);
+            popUpText = tile === null ? "No information available" :
+                        (tile.imageUrl == null? '' : '<a href="' + tile.imageUrl + '" target="TileImage"><img src="' + tile.imageUrl + '" width=300 /><br></a>')
+                        + 'Tile Nr.: ' + tile.tileNr + '<br>'
+                        + 'Tile Size: ' + tile.tileWidth + ' x ' + tile.tileHeight + '<br>'
+                        + 'Tile Position: ' + tile.tileLeft + ' x ' + tile.tileTop + '<br>'
+                        + 'Image Nr.: ' + tile.imageNr + '<br>'
+                        + 'Image Name: ' + tile.imageName + '<br>'
+                        + 'Image Extension: ' + tile.imageExtension + '<br>'
+                        + 'Image Usage Count: ' + tile.imageUsageCount + '<br>';
+            showPopUpWindow(popUpText,callback);
+        };
+
+        // PopUp showing only the image
+        var getPopUpImageOnly = function (x,y,callback) {
+            var tile = getTileObject(x,y);
+            popUpText = tile === null || tile.imageUrl === null ? "No information available" : '<a href="' + tile.imageUrl + '" target="TileImage"><img src="' + tile.imageUrl + '" width=300 /><br></a>';
+            showPopUpWindow(popUpText,callback);
+        };
+
+        // PopUp showing the image with name and usage count
+        var getPopUpImageWithName = function (x,y,callback) {
+            var tile = getTileObject(x,y);
+            popUpText = tile === null || tile.imageUrl === null ? "No information available" : '<a href="' + tile.imageUrl + '" target="TileImage"><img src="' + tile.imageUrl + '" width=300 /><br></a>' 
+                + '<center>' + tile.imageName + ' (used ' + tile.imageUsageCount + ' times)</center>';
+            showPopUpWindow(popUpText,callback);
+        };
+
+        // PopUp showing only ImageNr
+        var getPopUpTextOnly = function (x,y,callback) {
+            var tile = getTileObject(x,y);
+            popUpText = tile === null || tile.imageUrl === null ? "No information available" : '<center>image #' + tile.imageNr + ' used ' + tile.imageUsageCount + ' times</center>'; 
+            showPopUpWindow(popUpText,callback);
+        };
+
+        // Get the Help Text to show when clicking on the ? button
+        var getHelpText = function () {
+            return {
+                maxWidth: 500,
+                minWidth: 300,
+                popUpText:    '<table class="help-table"><thead><tr><th></th><th>Mouse</th><th>Touchscreen</th><th>Keyboard</th></tr></thead><tbody>' 
+                            + '<tr><td>Zoom In</td><td>Wheel or Doubleclick</td><td>Enlarge with two Fingers</td><td>+</td></tr><tr>'
+                            + '<tr><td>Zoom Out</td><td>Wheel or Shift + Doubleclick</td><td>Reduce with two Fingers</td><td>-</td></tr><tr>'
+                            + '<tr><td>Pan</td><td>Left Click + Move</td><td>Short Press + Move</td><td>Arrow Keys</td></tr><tr>'
+                            + '<tr><td>Show Info</td><td>Right Click</td><td>Long Press</td><td></td></tr><tr>'
+                            + '<tr><td>Hide Info</td><td>Left Click on map</td><td>Short Press on map</td><td>Esc</td></tr><tr>'
+                            + '<tr><td>Zoom area</td><td>Left Click + Shift + Move</td><td></td><td></td></tr><tr>'
+                            + '</tbody></table>',
+            }
+        }; 
+
+        // This function builds the search text.
+        // This function is invoked once when loading the mosaic.
+        // It returns an array with 3 elements: x,y,title.
+        // If two tiles have the same title then it will be displayed only once in the search list.
+        var getSearchText = function () {
+            var l = tileArrays.length;
+            var searchList = new Array(l);
+            for (n=0; n<l; ++n) {
+                tileInfo = tileArrays[n];
+                searchList[n] = [tileInfo[0]+tileInfo[2]/2, tileInfo[1]+tileInfo[3]/2, tileInfo[8]];
+            }
+            return searchList;
+        };
+
+        // Map Options
+        var mapOptions = {
+            getPopUpText: getPopUpImageWithName, // function that retrieves the HTML text to show for a tile. Can be null to avoid popup.
+            getHelpText: getHelpText, // function that retrieves the HTML text to show as PopUp for a help. (can be null to hide the ? button)
+            attribution: "Mosaic created by AndreaMosaic", // set my own attribution text, as html text. Can be null to have no additional attribution.
+            keepPopUpInView: true, // if true the map will autopan so that the popup window is awlays shown.
+            fullscreenControl: !navigator.vendor.match(/apple/i),
+            getSearchText: getSearchText,    // function that retrieves the text of each tile that will be searched. Null to avoid search.
+            searchMiddleOfText: true, // false: search elements only by initial text
+            searchCaseInsensitive: true, // false: search elements in case sensitive text
+            searchAutocomplete: true, // complete input with first suggested result and select this filled-in text.
+            searchAutoHideMarker: true, // remove circle and marker on search control collapsed
+            searchMarkerFound: null, // specify a L.Icon or null for the default
+            searchText:'Tile...', // text for the Search
+            searchTextError:'Tile not found',    //error message
+            searchTextCancel: 'Cancel',          //title in cancel button        
+            searchTextPlaceholder: 'Search Tile...',   //placeholder value         
+            searchContainer: '', // container id to insert Search Control
+            zoomControl: true, // false to not show a zoom control with +/- buttons
+            panInertia: null, // can be null, true or false. Inertia feels nice on touchscreen devices
+            panInertiaDeceleration: null, // can be null or a value in pixels/second.
+        };
+
+        // Show the Mosaic
+        ShowAndreaMosaic(
+            'AndreaMosaic', // Div ID
+            'mosaic/', // Base URL of the Mosaic Tiles
+            4960, // Width in Pixels
+            3100, // Height in Pixels
+            mapOptions
+            );
+    </script>
+</body>
+</html>
