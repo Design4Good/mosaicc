@@ -9,7 +9,10 @@ July release: [United in Pride](2025-07/united/color/index.html)
 ## Keywords and Parameters  
 <details>
 
+
+
 <summary>Search terms used when searching through the unsplash</summary>
+
 
 - rainbow
 - lgbt
@@ -23,6 +26,9 @@ July release: [United in Pride](2025-07/united/color/index.html)
 - gay
 - two spirited
 - nonbinary
+
+Example:
+```https://unsplash.com/s/photos/queer```
 
 </details>
 <details>
