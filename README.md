@@ -6,6 +6,8 @@
 
 July release: [United in Pride](2025-07/united/color/index.html) 
 
+Aug release: [United in Pride](2025-07/united/color/index2.html) 
+
 ## Keywords and Parameters  
 <details>
 
