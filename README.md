@@ -13,7 +13,7 @@ July release: [United in Pride](2025-07/united/color/index.html)
 
 <summary>Search terms used when searching through the unsplash</summary>
 
-
+### Search phrases
 - rainbow
 - lgbt
 - queer never retires
@@ -27,9 +27,11 @@ July release: [United in Pride](2025-07/united/color/index.html)
 - two spirited
 - nonbinary
 
-Example API calls:
+### Example API calls
 - ```https://unsplash.com/s/photos/queer```
 - ```https://unsplash.com/s/photos/queer-never-retires```
+- ```https://www.pexels.com/search/queer%20never%20retires/```
+- ```https://www.pexels.com/search/lgbt/```
  
 </details>
 <details>
