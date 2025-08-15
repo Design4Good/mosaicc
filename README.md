@@ -27,9 +27,10 @@ July release: [United in Pride](2025-07/united/color/index.html)
 - two spirited
 - nonbinary
 
-Example:
-```https://unsplash.com/s/photos/queer```
-
+Example API calls:
+- ```https://unsplash.com/s/photos/queer```
+- ```https://unsplash.com/s/photos/queer-never-retires```
+ 
 </details>
 <details>
 
