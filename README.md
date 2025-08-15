@@ -41,6 +41,10 @@ July release: [United in Pride](2025-07/united/color/index.html)
 
 | Parameter | Value used |
 | :--|:--|
+| | A3 size |
+| AndreaMosaic program version | Square Tiles (1:1) |
+| | 500 tiles |
+| Use same tile up to X times | 3 |
 | Use same tile up to X times | 2 |
 | % of color change permitted | 40% |
 
