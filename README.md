@@ -48,6 +48,8 @@ July release: [United in Pride](2025-07/united/color/index.html)
 | Use same tile up to X times | 2 |
 | % of color change permitted | 40% |
 
+See [User manual](https://www.andreaplanet.com/andreamosaic/AndreaMosaicManual.pdf)
+
 </details>
  
 ## Resources
